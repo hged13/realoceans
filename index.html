@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.22.0"></script>
+	<script src="https://cdn.jsdelivr.net/npm/vega-embed@6.21.0"></script>
+  <style>
+    #table2 {
+      position:relative; left:870px; top:-200px;
+    border-color: red; }
+
+    #table1 {
+      position:relative; left:870px; top:-230px; 
+    border-color: blue;}
+      #view{
+        position: relative; top: 100px; 
+      }
+   #na{
+    font-size: large;
+
+   }
+   #no{
+    position: relative; top:490px; left:50px;
+   }
+    </style>
+
+  </style>
+</head>
+<div align="center"
+id="na">Hypothesis: There is more dramatic variance in the depth of the ocean than the elevation of the land. <br> <br> Map and stats derived from 1.0 degree data.  </div> </div>
+
+<div id="no">Note: white space represents an ocean depth '0' value or undetermined value.  </div>
+
+
+
+
+
+<body bgcolor = "#F8F0E3">  
+
+  
+  <div id="view"></div>
+  
+  <script>
+  	vegaEmbed(
+      '#view',
+      'raster.vg.json');
+      
+     
+  </script>
+    <table border="1" id="table1" bgcolor:"skyblue">
+      <tr>
+      <th>Oceans</th> <th>Depth</th>
+      </tr> <tr>
+      <td>Mean:</td>
+      <td> 3458 meters </td> </tr>
+      <tr>
+      <td>Standard Deviation:</td> <td> 1703 meters </td> <tr>
+      <td>Max:</td> <td > 8000 meters </td>
+      </tr>
+       </table>
+  
+       <table border="1" id="table2">
+        
+
+        <tr>
+        <th>Land</th> <th>Elevation</th>
+        </tr> <tr>
+        <td>Mean:</td>
+        <td> 1090 meters </td> </tr>
+        <tr>
+        <td>Standard Deviation:</td> <td> 1152 meters </td> <tr>
+        <td>Max:</td> <td > 6150 meters </td>
+        </tr>
+         </table>
+
+         <div align="center"> Data Sources: https://neo.gsfc.nasa.gov</div>
+</body>

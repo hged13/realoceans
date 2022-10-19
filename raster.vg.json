@@ -1,0 +1,216 @@
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "width": 800,
+    "height": 400,
+    "autosize": "fit-x",
+    "title": {"text":"Ocean Depth (year 2000) and Land Elevation (year 2002)",
+    "anchor": "middle",
+    "dy": 40},
+   
+    
+    
+
+
+  
+  
+    "signals": [
+      {
+        "name": "projection", "value": "equirectangular"
+      },
+      {
+        "name": "scale", "value": 100
+       
+      },
+      {
+        "name": "rotate0", "value": 0
+      },
+      {
+        "name": "rotate1", "value": 0
+        
+      },
+      {
+        "name": "rotate2", "value": 0
+        
+      },
+      {
+        "name": "opacity", "value": 0.5},
+       
+      {
+        "name": "levels", "value": 6
+      },
+      {
+        "name": "stop", "value": 6400
+      },
+      {
+        "name": "stop2", "value": 8000
+      },
+    
+      {
+        "name": "step",
+        "update": "stop / levels"
+      },
+      {
+        "name": "step2",
+        "update": "stop2 / levels"
+      }
+      
+    ],
+
+  
+    "data": [
+      {
+        "name": "Elevation",
+        "url": "Elevation.json"
+      },
+      {
+        "name": "contours",
+        "source": "Elevation",
+        "transform": [
+          {
+            "type": "isocontour",
+            "thresholds": {"signal": "sequence(step,stop,step)"}
+          }
+        ]
+      },
+      
+    
+    {
+      "name": "oceans",
+      "url": "csvjson.json"
+    },
+   
+    
+    {
+      "name": "contours2",
+      "asp": 1,
+      "source": "oceans",
+      "transform": [
+        {
+          "type": "isocontour",
+          "thresholds": {"signal": "sequence(step2,stop2,step2)"}
+        }
+      ]
+    }, {
+      "name": "world",
+      "url": "custom.geo.json"
+    }],
+  
+    "projections": [
+      {
+        "name": "projection",
+        "type": {"signal": "projection"},
+        "scale": {"signal": "scale"},
+        "rotate": {"signal": "[rotate0, rotate1, rotate2]"},
+        "translate": {"signal": "[width/2, height/2]"}
+      }
+    ],
+  
+    "scales": [
+      {
+        "name": "color",
+        "type": "quantize",
+        "domain": {"signal": "[0, 6400]"},
+        "range": {"scheme": "reds"}
+        }
+      ,
+      {
+        "name": "color2",
+        "type": "quantize",
+        "domain": {"signal": "[0, 8000]"},
+        "range": {"scheme": ["#FEFCFB", "#1282A2", "#034078", "#001F54", "0A1128"]}
+      }
+    ],
+  
+    "marks": [
+      {
+        "type": "shape",
+        "clip": true,
+        "from": {"data": "world"},
+        "encode": {
+          "update": {
+            "strokeWidth": {"value": 1},
+            "stroke": {"value": "#eee"},
+            "fill": {"value": "#fdc998"},
+            "fillOpacity": {"value": ".5"}
+          }
+          
+        },
+        "transform": [
+          {
+            "type": "geoshape",
+            "projection": "projection"
+          }
+        ]
+      },
+      {
+        "type": "shape",
+        "clip": true,
+        "from": { "data": "contours"},
+        "encode": {
+          "update": {
+            "fill": {"scale": "color", "field": "contour.value"},
+            "fillOpacity": {"signal": "opacity"}
+          }
+        },
+        "transform": [
+          {
+            "type": "geoshape",
+            "field": "datum.contour",
+            "projection": "projection"
+          }
+        ]
+      },
+      {
+        "type": "shape",
+        "clip": true,
+        "from": { "data": "contours2"},
+        "encode": {
+          "update": {
+            "fill": {"scale": "color2", "field": "contour.value"},
+            "fillOpacity": {"signal": "opacity"}
+          }
+        },
+        "transform": [
+          {
+            "type": "geoshape",
+            "field": "datum.contour",
+            "projection": "projection"
+          }
+        ]
+      }
+    ],
+  
+    "legends": [
+      {
+        "title": "Elevation (0-6400 meters)",
+        "fill": "color",
+        "orient": "bottom",
+        "offset": 5,
+        "type": "gradient",
+        "gradientLength": 300,
+        "gradientThickness": 12,
+        "titlePadding": 10,
+        "titleOrient": "left",
+        "titleAnchor": "end",
+        "direction": "horizontal"
+      }
+    ,
+    {
+      "title": "Ocean Depth (0-8000 meters)",
+      
+      "fill": "color2",
+      "orient": "right",
+      "offset": 5,
+      "type": "gradient",
+      "gradientLength": 300,
+      "gradientThickness": 12,
+      "titlePadding": 10,
+      "titleOrient": "left",
+      "titleAnchor": "end",
+      "direction": "vertical"
+    }],
+  
+    "config": {
+      "legend": {"layout": {"anchor": "middle"}}
+    }
+  }
